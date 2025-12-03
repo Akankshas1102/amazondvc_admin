@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Admin Panel - Amazon Device Control</title>
+    <link rel="stylesheet" href="admin-style.css" />
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="header-left">
+                <h1>⚙️ Admin Panel</h1>
+                <span class="welcome-text">Welcome, <span id="username">Admin</span></span>
+            </div>
+            <div class="header-right">
+                <a href="/" class="btn btn-secondary">← Main App</a>
+                <button id="logoutBtn" class="btn btn-danger">Logout</button>
+            </div>
+        </header>
+        
+        <!-- Navigation Tabs -->
+        <nav class="admin-nav">
+            <button class="nav-tab active" data-tab="queries">Query Configuration</button>
+            <button class="nav-tab" data-tab="password">Change Password</button>
+        </nav>
+        
+        <!-- Tab Content -->
+        <main class="admin-main">
+            <!-- Query Configuration Tab -->
+            <div id="queries-tab" class="tab-content active">
+                <div class="section-header">
+                    <h2>SQL Query Configuration</h2>
+                    <p class="section-description">
+                        Configure dynamic SQL queries used by the system. Changes take effect immediately.
+                    </p>
+                </div>
+                
+                <!-- Query List -->
+                <div class="query-list-container">
+                    <h3>Available Queries</h3>
+                    <div id="queryList" class="query-list">
+                        <div class="loader">Loading queries...</div>
+                    </div>
+                </div>
+                
+                <!-- Query Editor -->
+                <div class="query-editor-container">
+                    <div class="editor-header">
+                        <h3 id="editorTitle">Query Editor</h3>
+                        <div class="editor-actions">
+                            <button id="loadDefaultBtn" class="btn btn-secondary" style="display:none;">
+                                Load Default
+                            </button>
+                            <button id="testQueryBtn" class="btn btn-info" style="display:none;">
+                                Validate Query
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="editorPlaceholder" class="editor-placeholder">
+                        <p>👈 Select a query from the list to edit</p>
+                    </div>
+                    
+                    <div id="queryEditor" class="query-editor" style="display:none;">
+                        <div class="form-group">
+                            <label for="queryName">Query Name</label>
+                            <input 
+                                type="text" 
+                                id="queryName" 
+                                class="form-input" 
+                                readonly 
+                                disabled
+                            />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="queryDescription">Description</label>
+                            <input 
+                                type="text" 
+                                id="queryDescription" 
+                                class="form-input" 
+                                placeholder="Enter query description (optional)"
+                            />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="querySQL">SQL Query</label>
+                            <textarea 
+                                id="querySQL" 
+                                class="form-textarea" 
+                                rows="12" 
+                                placeholder="Enter SQL query..."
+                            ></textarea>
+                            <div class="query-help">
+                                <strong>⚠️ Important:</strong>
+                                <ul>
+                                    <li>Only SELECT queries are allowed</li>
+                                    <li>Use <code>:building_id</code> for building parameter</li>
+                                    <li>Maintain column names expected by the system</li>
+                                    <li>Test queries before saving!</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="editor-footer">
+                            <button id="saveQueryBtn" class="btn btn-primary">
+                                💾 Save Query
+                            </button>
+                            <button id="cancelEditBtn" class="btn btn-secondary">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Change Password Tab -->
+            <div id="password-tab" class="tab-content">
+                <div class="section-header">
+                    <h2>Change Password</h2>
+                    <p class="section-description">
+                        Update your admin password. You will need to login again after changing.
+                    </p>
+                </div>
+                
+                <div class="password-form-container">
+                    <form id="changePasswordForm" class="password-form">
+                        <div class="form-group">
+                            <label for="currentPassword">Current Password</label>
+                            <input 
+                                type="password" 
+                                id="currentPassword" 
+                                class="form-input" 
+                                required
+                                autocomplete="current-password"
+                            />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <input 
+                                type="password" 
+                                id="newPassword" 
+                                class="form-input" 
+                                required
+                                minlength="6"
+                                autocomplete="new-password"
+                            />
+                            <small>Minimum 6 characters</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm New Password</label>
+                            <input 
+                                type="password" 
+                                id="confirmPassword" 
+                                class="form-input" 
+                                required
+                                minlength="6"
+                                autocomplete="new-password"
+                            />
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            🔒 Change Password
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Notification Toast -->
+        <div id="notification" class="notification"></div>
+    </div>
+    
+    <script src="admin.js"></script>
+</body>
+</html>

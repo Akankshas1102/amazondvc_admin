@@ -1,3 +1,6 @@
+# - bcrypt: Password hashing
+# - PyJWT: JWT token generation and validation
+
 fastapi
 uvicorn
 pydantic
@@ -7,3 +10,6 @@ python-dotenv
 schedule
 pytz
 jinja2
+cryptography
+bcrypt
+PyJWT

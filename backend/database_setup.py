@@ -1,7 +1,14 @@
-# backend/database_setup.py
+"""
+Database Setup Script
+=====================
+Creates all necessary SQLite tables for the application.
+NEW: Added tables for admin users and query configurations.
+"""
+
 import sqlite3
 import os
 from logger import get_logger
+from auth import hash_password  # NEW: Import for password hashing
 
 logger = get_logger(__name__)
 
@@ -15,6 +22,8 @@ def init_sqlite_db():
     try:
         with sqlite3.connect(SQLITE_DB_PATH) as conn:
             logger.info("Connecting to database... ensuring tables exist.")
+
+            # ============ EXISTING TABLES ============
 
             # Table for building schedules (removed end_time)
             conn.execute("""
@@ -69,13 +78,85 @@ def init_sqlite_db():
                 )
             """)
 
+            # ============ NEW TABLES FOR ADMIN PANEL ============
+
+            # Table for admin users
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS admin_users (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    username TEXT UNIQUE NOT NULL,
+                    password_hash TEXT NOT NULL,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+
+            # Table for query configurations
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS query_config (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    query_name TEXT UNIQUE NOT NULL,
+                    query_sql TEXT NOT NULL,
+                    description TEXT,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+
             conn.commit()
-        logger.info("SQLite database tables verified successfully.")
+            logger.info("✅ SQLite database tables verified successfully.")
+
+            # ============ CREATE DEFAULT ADMIN USER ============
+            create_default_admin(conn)
 
     except Exception as e:
-        logger.error(f"Error initializing SQLite database: {e}")
+        logger.error(f"❌ Error initializing SQLite database: {e}")
         raise
+
+
+def create_default_admin(conn):
+    """
+    Creates a default admin user if no admin users exist.
+    
+    ⚠️ DEFAULT CREDENTIALS:
+    Username: admin
+    Password: admin123
+    
+    🔒 SECURITY WARNING: Change these credentials immediately after first login!
+    """
+    cursor = conn.cursor()
+    cursor.execute("SELECT COUNT(*) FROM admin_users")
+    count = cursor.fetchone()[0]
+    
+    if count == 0:
+        logger.warning("=" * 60)
+        logger.warning("⚠️  NO ADMIN USERS FOUND - CREATING DEFAULT ADMIN")
+        logger.warning("=" * 60)
+        
+        default_username = "admin"
+        default_password = "admin123"
+        
+        password_hash = hash_password(default_password)
+        
+        cursor.execute("""
+            INSERT INTO admin_users (username, password_hash)
+            VALUES (?, ?)
+        """, (default_username, password_hash))
+        
+        conn.commit()
+        
+        logger.warning("✅ Default admin user created:")
+        logger.warning(f"   Username: {default_username}")
+        logger.warning(f"   Password: {default_password}")
+        logger.warning("")
+        logger.warning("🔒 SECURITY: Please change this password immediately!")
+        logger.warning("   Go to: http://127.0.0.1:7070/login")
+        logger.warning("=" * 60)
+    else:
+        logger.info(f"✅ Found {count} existing admin user(s)")
+
 
 if __name__ == "__main__":
     init_sqlite_db()
-    print("\nDatabase setup complete (safe mode).")
+    print("\n✅ Database setup complete (safe mode).")
+    print("\n🔐 If default admin was created, please change the password!")
