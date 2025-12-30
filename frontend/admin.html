@@ -21,10 +21,12 @@
         
         <nav class="admin-nav">
             <button class="nav-tab active" data-tab="queries">Query Configuration</button>
+            <button class="nav-tab" data-tab="users">User Management</button>
             <button class="nav-tab" data-tab="password">Change Password</button>
         </nav>
         
         <main class="admin-main">
+            <!-- ==================== QUERY CONFIGURATION TAB ==================== -->
             <div id="queries-tab" class="tab-content active">
                 <div class="section-header">
                     <h2>SQL Query Configuration</h2>
@@ -33,83 +35,195 @@
                     </p>
                 </div>
                 
-                <div class="query-list-container">
-                    <h3>Available Queries</h3>
-                    <div id="queryList" class="query-list">
-                        <div class="loader">Loading queries...</div>
-                    </div>
-                </div>
-                
-                <div class="query-editor-container">
-                    <div class="editor-header">
-                        <h3 id="editorTitle">Query Editor</h3>
-                        <div class="editor-actions">
-                            <button id="loadDefaultBtn" class="btn btn-secondary" style="display:none;">
-                                Load Default
-                            </button>
-                            <button id="testQueryBtn" class="btn btn-info" style="display:none;">
-                                Validate Query
-                            </button>
+                <div style="display: grid; grid-template-columns: 350px 1fr; gap: 30px;">
+                    <div class="query-list-container">
+                        <h3>Available Queries</h3>
+                        <div id="queryList" class="query-list">
+                            <div class="loader">Loading queries...</div>
                         </div>
                     </div>
                     
-                    <div id="editorPlaceholder" class="editor-placeholder">
-                        <p>👈 Select a query from the list to edit</p>
-                    </div>
-                    
-                    <div id="queryEditor" class="query-editor" style="display:none;">
-                        <div class="form-group">
-                            <label for="queryName">Query Name</label>
-                            <input 
-                                type="text" 
-                                id="queryName" 
-                                class="form-input" 
-                                readonly 
-                                disabled
-                            />
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="queryDescription">Description</label>
-                            <input 
-                                type="text" 
-                                id="queryDescription" 
-                                class="form-input" 
-                                placeholder="Enter query description (optional)"
-                            />
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="querySQL">SQL Query</label>
-                            <textarea 
-                                id="querySQL" 
-                                class="form-textarea" 
-                                rows="12" 
-                                placeholder="Enter SQL query..."
-                            ></textarea>
-                            <div class="query-help">
-                                <strong>⚠️ Important:</strong>
-                                <ul>
-                                    <li>Only SELECT queries are allowed</li>
-                                    <li>Use <code>:building_id</code> for building parameter</li>
-                                    <li>Maintain column names expected by the system</li>
-                                    <li>Test queries before saving!</li>
-                                </ul>
+                    <div class="query-editor-container">
+                        <div class="editor-header">
+                            <h3 id="editorTitle">Query Editor</h3>
+                            <div class="editor-actions">
+                                <button id="loadDefaultBtn" class="btn btn-secondary" style="display:none;">
+                                    Load Default
+                                </button>
+                                <button id="testQueryBtn" class="btn btn-info" style="display:none;">
+                                    Validate Query
+                                </button>
                             </div>
                         </div>
                         
-                        <div class="editor-footer">
-                            <button id="saveQueryBtn" class="btn btn-primary">
-                                💾 Save Query
-                            </button>
-                            <button id="cancelEditBtn" class="btn btn-secondary">
-                                Cancel
-                            </button>
+                        <div id="editorPlaceholder" class="editor-placeholder">
+                            <p>👈 Select a query from the list to edit</p>
+                        </div>
+                        
+                        <div id="queryEditor" class="query-editor" style="display:none;">
+                            <!-- Query Mode Selector -->
+                            <div class="query-mode-selector">
+                                <button id="basicModeBtn" class="mode-btn active">
+                                    📝 Basic Mode
+                                </button>
+                                <button id="advancedModeBtn" class="mode-btn">
+                                    ⚙️ Advanced Mode
+                                </button>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="queryName">Query Name</label>
+                                <input 
+                                    type="text" 
+                                    id="queryName" 
+                                    class="form-input" 
+                                    readonly 
+                                    disabled
+                                />
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="queryDescription">Description</label>
+                                <input 
+                                    type="text" 
+                                    id="queryDescription" 
+                                    class="form-input" 
+                                    placeholder="Enter query description (optional)"
+                                />
+                            </div>
+
+                            <!-- Basic Mode Form -->
+                            <div id="basicModeForm" style="display:none;">
+                                <div class="form-group">
+                                    <label for="deviceType">Device Type (for panel_devices query)</label>
+                                    <input 
+                                        type="number" 
+                                        id="deviceType" 
+                                        class="form-input" 
+                                        placeholder="e.g., 138"
+                                    />
+                                    <small>Default: 138 (panel devices)</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="buildingTableName">Building Table Name</label>
+                                    <input 
+                                        type="text" 
+                                        id="buildingTableName" 
+                                        class="form-input" 
+                                        placeholder="e.g., Building_TBL"
+                                    />
+                                    <small>Default: Building_TBL</small>
+                                </div>
+
+                                <div class="info-box">
+                                    <strong>ℹ️ Basic Mode</strong>
+                                    <p>In Basic Mode, you can only modify:</p>
+                                    <ul>
+                                        <li><strong>Device Type:</strong> The numeric ID used to filter panel devices</li>
+                                        <li><strong>Building Table:</strong> The name of the table containing building information</li>
+                                    </ul>
+                                    <p>All other query logic remains unchanged for safety.</p>
+                                </div>
+                            </div>
+
+                            <!-- Advanced Mode Form -->
+                            <div id="advancedModeForm" style="display:none;">
+                                <div class="form-group">
+                                    <label for="querySQL">SQL Query</label>
+                                    <textarea 
+                                        id="querySQL" 
+                                        class="form-textarea" 
+                                        rows="12" 
+                                        placeholder="Enter SQL query..."
+                                    ></textarea>
+                                    <div class="query-help">
+                                        <strong>⚠️ Important:</strong>
+                                        <ul>
+                                            <li>Only SELECT queries are allowed</li>
+                                            <li>Use <code>:building_id</code> for building parameter</li>
+                                            <li>Maintain column names expected by the system</li>
+                                            <li>Test queries before saving!</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="editor-footer">
+                                <button id="saveQueryBtn" class="btn btn-primary">
+                                    💾 Save Query
+                                </button>
+                                <button id="cancelEditBtn" class="btn btn-secondary">
+                                    Cancel
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             
+            <!-- ==================== USER MANAGEMENT TAB ==================== -->
+            <div id="users-tab" class="tab-content">
+                <div class="section-header">
+                    <h2>User Management</h2>
+                    <p class="section-description">
+                        Create and manage user accounts. Admin users have full access to all features.
+                    </p>
+                </div>
+
+                <div class="user-management-container">
+                    <div class="create-user-section">
+                        <h3>Create New User</h3>
+                        <form id="createUserForm" class="user-form">
+                            <div class="form-group">
+                                <label for="newUsername">Username</label>
+                                <input 
+                                    type="text" 
+                                    id="newUsername" 
+                                    class="form-input" 
+                                    required
+                                    minlength="3"
+                                    placeholder="Enter username"
+                                />
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="newUserPassword">Password</label>
+                                <input 
+                                    type="password" 
+                                    id="newUserPassword" 
+                                    class="form-input" 
+                                    required
+                                    minlength="6"
+                                    placeholder="Enter password"
+                                />
+                                <small>Minimum 6 characters</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="newUserIsAdmin" />
+                                    Grant admin privileges
+                                </label>
+                                <small>Admin users can access all features and manage other users</small>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">
+                                ➕ Create User
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="users-list-section">
+                        <h3>Existing Users</h3>
+                        <div id="usersList" class="users-list">
+                            <div class="loader">Loading users...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== CHANGE PASSWORD TAB ==================== -->
             <div id="password-tab" class="tab-content">
                 <div class="section-header">
                     <h2>Change Password</h2>

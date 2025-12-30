@@ -1,84 +1,7 @@
-// frontend/app.js - COMPLETE FIXED VERSION
-// ============================================
-// Replace your entire app.js with this file
-// ============================================
-
-// ============================================
-// AUTHENTICATION MANAGER
-// ============================================
-const AuthManager = {
-    token: null,
-    username: null,
-    
-    init() {
-        this.token = localStorage.getItem('adminToken');
-        this.username = localStorage.getItem('adminUsername');
-        
-        console.log('[Auth] Initialization:', {
-            hasToken: !!this.token,
-            username: this.username,
-            path: window.location.pathname
-        });
-        
-        // If no token and not on login page, redirect
-        if (!this.token && window.location.pathname !== '/login') {
-            console.log('[Auth] No token found, redirecting to login...');
-            window.location.replace('/login');
-            return false;
-        }
-        
-        // If token exists, verify it's valid
-        if (this.token && window.location.pathname !== '/login') {
-            console.log('[Auth] Token found, verifying...');
-            this.verifyToken().catch(() => {
-                console.log('[Auth] Token invalid, redirecting to login...');
-                this.clearAuth();
-                window.location.replace('/login');
-            });
-        }
-        
-        return true;
-    },
-    
-    async verifyToken() {
-        if (!this.token) throw new Error('No token');
-        
-        const response = await fetch('http://127.0.0.1:7070/api/admin/queries', {
-            headers: { 'Authorization': `Bearer ${this.token}` }
-        });
-        
-        if (!response.ok) {
-            throw new Error('Token verification failed');
-        }
-        
-        console.log('[Auth] Token verified successfully');
-        return true;
-    },
-    
-    clearAuth() {
-        localStorage.removeItem('adminToken');
-        localStorage.removeItem('adminUsername');
-        this.token = null;
-        this.username = null;
-    },
-    
-    logout() {
-        if (confirm('Are you sure you want to logout?')) {
-            this.clearAuth();
-            window.location.replace('/login');
-        }
-    }
-};
-
-// Initialize auth BEFORE anything else
-if (!AuthManager.init()) {
-    console.log('[Auth] Stopping app initialization due to auth failure');
-} else {
-    document.addEventListener('DOMContentLoaded', () => {
-        console.log('[App] DOM loaded, initializing app...');
-        App.initialize();
-    });
-}
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('[App] DOM loaded, initializing app...');
+    App.initialize();
+});
 
 // ============================================
 // MAIN APPLICATION
@@ -108,24 +31,12 @@ const App = {
         this.elements.closeButton = document.querySelector('.close-button');
         this.elements.modalSearch = document.getElementById('modalSearch');
         this.elements.modalSelectAllBtn = document.getElementById('modalSelectAllBtn');
-        this.elements.logoutBtn = document.getElementById('logoutBtn');
-        this.elements.usernameDisplay = document.getElementById('usernameDisplay');
 
         // Verify all critical elements exist
         if (!this.elements.buildingsContainer) {
             console.error('[App] Critical element missing: deviceList');
             this.showNotification('Application initialization failed', true);
             return;
-        }
-
-        // Display username if element exists
-        if (this.elements.usernameDisplay && AuthManager.username) {
-            this.elements.usernameDisplay.textContent = `Logged in as: ${AuthManager.username}`;
-        }
-
-        // Setup logout button
-        if (this.elements.logoutBtn) {
-            this.elements.logoutBtn.addEventListener('click', () => AuthManager.logout());
         }
 
         this.setupBuildingSelector();
@@ -154,33 +65,16 @@ const App = {
         console.log(`[API] Request: ${endpoint}`);
         const url = `${this.API_BASE_URL}/${endpoint}`;
         
-        const headers = {
-            'Content-Type': 'application/json',
-            ...options.headers
-        };
-        
-        // Add auth header for admin endpoints
-        if (endpoint.startsWith('admin/') && AuthManager.token) {
-            headers['Authorization'] = `Bearer ${AuthManager.token}`;
-        }
-        
         try {
             if(this.elements.loader) this.elements.loader.style.display = 'block';
             
             const response = await fetch(url, {
                 ...options,
-                headers
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...options.headers
+                }
             });
-            
-            if (response.status === 401) {
-                console.log('[API] Unauthorized response, clearing auth...');
-                this.showNotification('Session expired. Please login again.', true);
-                setTimeout(() => {
-                    AuthManager.clearAuth();
-                    window.location.replace('/login');
-                }, 2000);
-                throw new Error('Unauthorized');
-            }
             
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({ 
@@ -768,11 +662,6 @@ const App = {
 
             if (modalItemList) modalItemList.innerHTML = '';
         };
-
-        modalConfirmBtn.__currentClickHandler__ = confirmHandler; 
-        modalConfirmBtn.addEventListener('click', confirmHandler);
-        
-        modalCancelBtn.__currentClickHandler__ = closeModal;
 
         modalConfirmBtn.__currentClickHandler__ = confirmHandler; 
         modalConfirmBtn.addEventListener('click', confirmHandler);

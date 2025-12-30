@@ -1,8 +1,3 @@
-// frontend/login.js - FIXED VERSION
-// ============================================
-// Login page with proper redirect logic
-// ============================================
-
 console.log('[Login] Page loaded');
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -41,20 +36,30 @@ async function verifyTokenAndRedirect(token) {
         });
         
         if (response.ok) {
-            console.log('[Login] Token is valid, redirecting to main app...');
-            // Token is valid, redirect to main app
-            window.location.replace('/');
+            console.log('[Login] Token is valid');
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            
+            // Redirect based on admin status
+            if (isAdmin) {
+                console.log('[Login] Admin user, redirecting to admin panel...');
+                window.location.replace('/admin');
+            } else {
+                console.log('[Login] Regular user, redirecting to main app...');
+                window.location.replace('/');
+            }
         } else {
             console.log('[Login] Token is invalid, clearing...');
             // Token is invalid, clear it
             localStorage.removeItem('adminToken');
             localStorage.removeItem('adminUsername');
+            localStorage.removeItem('isAdmin');
         }
     } catch (error) {
         console.error('[Login] Token verification error:', error);
         // On error, clear token to be safe
         localStorage.removeItem('adminToken');
         localStorage.removeItem('adminUsername');
+        localStorage.removeItem('isAdmin');
     }
 }
 
@@ -95,19 +100,25 @@ async function handleLogin(event) {
         if (response.ok) {
             // Login successful
             console.log('[Login] Login successful, storing token...');
+            console.log('[Login] User is admin:', data.is_admin);
             
-            // Store token and username in localStorage
+            // Store token, username, and admin status in localStorage
             localStorage.setItem('adminToken', data.access_token);
             localStorage.setItem('adminUsername', data.username);
-            
-            console.log('[Login] Token stored, redirecting to main app...');
+            localStorage.setItem('isAdmin', data.is_admin.toString());
             
             // Show success message briefly
-            showError('Login successful! Redirecting...', false);
+            showError(`Login successful! Welcome ${data.is_admin ? 'Admin' : 'User'}...`, false);
             
-            // Redirect after a brief delay
+            // Redirect based on admin status
             setTimeout(() => {
-                window.location.replace('/');
+                if (data.is_admin) {
+                    console.log('[Login] Redirecting admin to admin panel...');
+                    window.location.replace('/admin');
+                } else {
+                    console.log('[Login] Redirecting user to main app...');
+                    window.location.replace('/');
+                }
             }, 500);
         } else {
             // Login failed

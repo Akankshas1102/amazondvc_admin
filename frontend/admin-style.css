@@ -55,6 +55,11 @@ body {
     display: inline-block;
 }
 
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+}
+
 .btn-primary {
     background: #3b82f6;
     color: white;
@@ -153,13 +158,6 @@ body {
 .section-description {
     color: #64748b;
     font-size: 1rem;
-}
-
-/* Query Configuration Layout */
-#queries-tab {
-    display: grid;
-    grid-template-columns: 350px 1fr;
-    gap: 30px;
 }
 
 /* Query List */
@@ -268,6 +266,39 @@ body {
     padding: 20px;
 }
 
+/* Query Mode Selector */
+.query-mode-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+.mode-btn {
+    flex: 1;
+    padding: 12px 20px;
+    border: 2px solid #e2e8f0;
+    border-radius: 6px;
+    background: white;
+    color: #64748b;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.mode-btn:hover {
+    border-color: #cbd5e1;
+}
+
+.mode-btn.active {
+    border-color: #667eea;
+    background: #667eea;
+    color: white;
+}
+
 /* Form Elements */
 .form-group {
     margin-bottom: 20px;
@@ -311,6 +342,46 @@ body {
     resize: vertical;
 }
 
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.checkbox-label input[type="checkbox"] {
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+}
+
+.info-box {
+    background: #e0f2fe;
+    border-left: 4px solid #0ea5e9;
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.info-box strong {
+    display: block;
+    margin-bottom: 8px;
+    color: #0c4a6e;
+}
+
+.info-box p {
+    margin: 8px 0;
+    color: #075985;
+}
+
+.info-box ul {
+    margin: 8px 0;
+    padding-left: 20px;
+    color: #075985;
+}
+
 .query-help {
     background: #fef3c7;
     border-left: 4px solid #f59e0b;
@@ -345,6 +416,79 @@ body {
     margin-top: 20px;
     padding-top: 20px;
     border-top: 1px solid #e2e8f0;
+}
+
+/* User Management */
+.user-management-container {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 30px;
+}
+
+.create-user-section,
+.users-list-section {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 25px;
+}
+
+.create-user-section h3,
+.users-list-section h3 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #1e293b;
+}
+
+.user-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.users-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.user-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 15px;
+    background: #fafafa;
+    transition: box-shadow 0.2s;
+}
+
+.user-card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.user-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.user-card-username {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.user-card-date {
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+.user-card-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 /* Password Change Form */
@@ -410,7 +554,7 @@ body {
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-    #queries-tab {
+    .user-management-container {
         grid-template-columns: 1fr;
     }
     
@@ -440,30 +584,14 @@ body {
         gap: 15px;
         align-items: flex-start;
     }
+
+    .user-card-header {
+        flex-direction: column;
+    }
     
     .notification {
         left: 20px;
         right: 20px;
         bottom: 20px;
     }
-}
-/* Admin Link in Header */
-.admin-link {
-    padding: 8px 16px;
-    background: white;
-    color: #667eea;
-    border: 2px solid #667eea;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 600;
-    transition: all 0.2s;
-    display: inline-block;
-}
-
-.admin-link:hover {
-    background: #667eea;
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
 }
