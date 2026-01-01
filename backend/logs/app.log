@@ -24603,3 +24603,129 @@ WHERE dvcDeviceType_FRK = 138
 2025-12-30 22:30:45 - INFO - uvicorn.error - shutdown:76 - Application shutdown complete.
 2025-12-30 22:30:45 - INFO - __main__ - write:26 - 2025-12-30 22:30:45,022 - INFO - uvicorn.error - Finished server process [21272]
 2025-12-30 22:30:45 - INFO - uvicorn.error - _serve:93 - Finished server process [21272]
+2026-01-02 00:01:10 - INFO - __main__ - <module>:36 - ==================================================
+2026-01-02 00:01:10 - INFO - __main__ - <module>:37 - Application Initialization Started
+2026-01-02 00:01:10 - INFO - __main__ - <module>:38 - ==================================================
+2026-01-02 00:01:10 - INFO - __main__ - <module>:68 - Setting up CORS middleware...
+2026-01-02 00:01:10 - INFO - __main__ - <module>:76 - ✅ CORS middleware configured
+2026-01-02 00:01:10 - INFO - __main__ - <module>:83 - Backend directory: C:\Users\Akanksha\Desktop\Amazon_admin\backend
+2026-01-02 00:01:10 - INFO - __main__ - <module>:84 - Root directory: C:\Users\Akanksha\Desktop\Amazon_admin
+2026-01-02 00:01:10 - INFO - __main__ - <module>:85 - Frontend directory: C:\Users\Akanksha\Desktop\Amazon_admin\frontend
+2026-01-02 00:01:10 - INFO - __main__ - <module>:91 - ✅ Frontend directory found at: C:\Users\Akanksha\Desktop\Amazon_admin\frontend
+2026-01-02 00:01:10 - INFO - __main__ - <module>:161 - Registering API routes...
+2026-01-02 00:01:10 - INFO - __main__ - <module>:163 - ✅ API routes registered
+2026-01-02 00:01:10 - INFO - __main__ - <module>:166 - Registering Admin routes...
+2026-01-02 00:01:10 - INFO - __main__ - <module>:168 - ✅ Admin routes registered
+2026-01-02 00:01:10 - INFO - __main__ - <module>:189 - ==================================================
+2026-01-02 00:01:10 - INFO - __main__ - <module>:190 - 🚀 Starting server on 127.0.0.1:7070
+2026-01-02 00:01:10 - INFO - __main__ - <module>:191 - 📊 Log level: debug
+2026-01-02 00:01:10 - INFO - __main__ - <module>:192 - ==================================================
+2026-01-02 00:01:10 - INFO - __main__ - <module>:193 - 
+2026-01-02 00:01:10 - INFO - __main__ - <module>:194 - 🔗 Application URLs:
+2026-01-02 00:01:10 - INFO - __main__ - <module>:195 -    Main App:    http://127.0.0.1:7070/
+2026-01-02 00:01:10 - INFO - __main__ - <module>:196 -    Admin Login: http://127.0.0.1:7070/login
+2026-01-02 00:01:10 - INFO - __main__ - <module>:197 -    Admin Panel: http://127.0.0.1:7070/admin
+2026-01-02 00:01:10 - INFO - __main__ - <module>:198 - 
+2026-01-02 00:01:10 - INFO - __main__ - <module>:199 - ==================================================
+2026-01-02 00:01:10 - DEBUG - asyncio - __init__:631 - Using proactor: IocpProactor
+2026-01-02 00:01:11 - INFO - main - <module>:36 - ==================================================
+2026-01-02 00:01:11 - INFO - main - <module>:37 - Application Initialization Started
+2026-01-02 00:01:11 - INFO - main - <module>:38 - ==================================================
+2026-01-02 00:01:11 - INFO - main - <module>:68 - Setting up CORS middleware...
+2026-01-02 00:01:11 - INFO - main - <module>:76 - ✅ CORS middleware configured
+2026-01-02 00:01:11 - INFO - main - <module>:83 - Backend directory: C:\Users\Akanksha\Desktop\Amazon_admin\backend
+2026-01-02 00:01:11 - INFO - main - <module>:84 - Root directory: C:\Users\Akanksha\Desktop\Amazon_admin
+2026-01-02 00:01:11 - INFO - main - <module>:85 - Frontend directory: C:\Users\Akanksha\Desktop\Amazon_admin\frontend
+2026-01-02 00:01:11 - INFO - main - <module>:91 - ✅ Frontend directory found at: C:\Users\Akanksha\Desktop\Amazon_admin\frontend
+2026-01-02 00:01:11 - INFO - main - <module>:161 - Registering API routes...
+2026-01-02 00:01:11 - INFO - main - <module>:163 - ✅ API routes registered
+2026-01-02 00:01:11 - INFO - main - <module>:166 - Registering Admin routes...
+2026-01-02 00:01:11 - INFO - main - <module>:168 - ✅ Admin routes registered
+2026-01-02 00:01:11 - INFO - __main__ - write:26 - 2026-01-02 00:01:11,331 - INFO - uvicorn.error - Started server process [28164]
+2026-01-02 00:01:11 - INFO - uvicorn.error - _serve:83 - Started server process [28164]
+2026-01-02 00:01:11 - INFO - __main__ - write:26 - 2026-01-02 00:01:11,332 - INFO - uvicorn.error - Waiting for application startup.
+2026-01-02 00:01:11 - INFO - uvicorn.error - startup:48 - Waiting for application startup.
+2026-01-02 00:01:11 - INFO - main - lifespan:44 - Application starting up...
+2026-01-02 00:01:11 - INFO - main - lifespan:45 - Initializing SQLite database...
+2026-01-02 00:01:11 - INFO - database_setup - init_sqlite_db:24 - Connecting to database... ensuring tables exist.
+2026-01-02 00:01:11 - INFO - database_setup - init_sqlite_db:108 - ✅ SQLite database tables verified successfully.
+2026-01-02 00:01:11 - INFO - database_setup - create_default_admin:208 - ✅ Found 1 existing admin user(s)
+2026-01-02 00:01:11 - INFO - main - lifespan:48 - ✅ SQLite database initialized successfully
+2026-01-02 00:01:11 - INFO - main - lifespan:53 - Starting scheduler thread...
+2026-01-02 00:01:11 - INFO - services.scheduler_service - start_scheduler:79 - 🔧 SCHEDULER: Starting scheduler in background thread...
+2026-01-02 00:01:11 - INFO - services.scheduler_service - run_scheduler:62 - 🚀 SCHEDULER: Thread started
+2026-01-02 00:01:11 - INFO - services.scheduler_service - start_scheduler:82 - ✅ SCHEDULER: Background thread started successfully
+2026-01-02 00:01:11 - INFO - services.scheduler_service - run_scheduler:64 - ⏰ SCHEDULER: Job registered to run every 1 minute
+2026-01-02 00:01:11 - INFO - main - lifespan:56 - ✅ Scheduler started successfully
+2026-01-02 00:01:11 - INFO - __main__ - write:26 - 2026-01-02 00:01:11,362 - INFO - uvicorn.error - Application startup complete.
+2026-01-02 00:01:11 - INFO - uvicorn.error - startup:62 - Application startup complete.
+2026-01-02 00:01:11 - INFO - __main__ - write:26 - 2026-01-02 00:01:11,363 - INFO - uvicorn.error - Uvicorn running on http://127.0.0.1:7070 (Press CTRL+C to quit)
+2026-01-02 00:01:11 - INFO - uvicorn.error - _log_started_message:215 - Uvicorn running on http://127.0.0.1:7070 (Press CTRL+C to quit)
+2026-01-02 00:01:17 - INFO - main - log_requests:179 - ⮕ Incoming request: GET /
+2026-01-02 00:01:17 - DEBUG - main - log_requests:180 - Request headers: {'host': '127.0.0.1:7070', 'connection': 'keep-alive', 'sec-ch-ua': '"Brave";v="143", "Chromium";v="143", "Not A(Brand";v="24"', 'sec-ch-ua-mobile': '?0', 'sec-ch-ua-platform': '"Windows"', 'upgrade-insecure-requests': '1', 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', 'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8', 'sec-gpc': '1', 'accept-language': 'en-US,en;q=0.8', 'sec-fetch-site': 'none', 'sec-fetch-mode': 'navigate', 'sec-fetch-user': '?1', 'sec-fetch-dest': 'document', 'accept-encoding': 'gzip, deflate, br, zstd', 'if-none-match': '"19408c8a4a6b7aae90fedfdfaeb1adf6"', 'if-modified-since': 'Tue, 30 Dec 2025 14:11:34 GMT'}
+2026-01-02 00:01:17 - DEBUG - main - serve_home:137 - Serving home page (index.html)
+2026-01-02 00:01:17 - INFO - main - log_requests:184 - ⮐ Response: GET / - Status: 200
+2026-01-02 00:01:17 - INFO - __main__ - write:26 - 2026-01-02 00:01:17,629 - INFO - uvicorn.access - 127.0.0.1:58354 - "GET / HTTP/1.1" 200
+2026-01-02 00:01:17 - INFO - __main__ - write:26 - 2026-01-02 00:01:17,629 - INFO - uvicorn.access - 127.0.0.1:58354 - "GET / HTTP/1.1" 200
+2026-01-02 00:01:17 - INFO - uvicorn.access - send:473 - 127.0.0.1:58354 - "GET / HTTP/1.1" 200
+2026-01-02 00:01:17 - INFO - main - log_requests:179 - ⮕ Incoming request: GET /app.js
+2026-01-02 00:01:17 - DEBUG - main - log_requests:180 - Request headers: {'host': '127.0.0.1:7070', 'connection': 'keep-alive', 'sec-ch-ua-platform': '"Windows"', 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', 'sec-ch-ua': '"Brave";v="143", "Chromium";v="143", "Not A(Brand";v="24"', 'sec-ch-ua-mobile': '?0', 'accept': '*/*', 'sec-gpc': '1', 'accept-language': 'en-US,en;q=0.8', 'sec-fetch-site': 'same-origin', 'sec-fetch-mode': 'no-cors', 'sec-fetch-dest': 'script', 'referer': 'http://127.0.0.1:7070/', 'accept-encoding': 'gzip, deflate, br, zstd', 'if-none-match': '"f7869778e6c5c7feb3efb118c79cb9a3"', 'if-modified-since': 'Tue, 30 Dec 2025 14:12:14 GMT'}
+2026-01-02 00:01:17 - INFO - main - log_requests:184 - ⮐ Response: GET /app.js - Status: 200
+2026-01-02 00:01:17 - INFO - __main__ - write:26 - 2026-01-02 00:01:17,732 - INFO - uvicorn.access - 127.0.0.1:58354 - "GET /app.js HTTP/1.1" 200
+2026-01-02 00:01:17 - INFO - __main__ - write:26 - 2026-01-02 00:01:17,732 - INFO - uvicorn.access - 127.0.0.1:58354 - "GET /app.js HTTP/1.1" 200
+2026-01-02 00:01:17 - INFO - uvicorn.access - send:473 - 127.0.0.1:58354 - "GET /app.js HTTP/1.1" 200
+2026-01-02 00:01:17 - INFO - main - log_requests:179 - ⮕ Incoming request: GET /api/buildings
+2026-01-02 00:01:17 - DEBUG - main - log_requests:180 - Request headers: {'host': '127.0.0.1:7070', 'connection': 'keep-alive', 'sec-ch-ua-platform': '"Windows"', 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', 'sec-ch-ua': '"Brave";v="143", "Chromium";v="143", "Not A(Brand";v="24"', 'content-type': 'application/json', 'sec-ch-ua-mobile': '?0', 'accept': '*/*', 'sec-gpc': '1', 'accept-language': 'en-US,en;q=0.8', 'sec-fetch-site': 'same-origin', 'sec-fetch-mode': 'cors', 'sec-fetch-dest': 'empty', 'referer': 'http://127.0.0.1:7070/', 'accept-encoding': 'gzip, deflate, br, zstd'}
+2026-01-02 00:01:17 - INFO - routes - list_buildings:45 - GET /buildings called - Fetching all buildings...
+2026-01-02 00:01:17 - DEBUG - services.device_service - get_distinct_buildings:28 - Fetching distinct buildings from database...
+2026-01-02 00:01:17 - INFO - services.proserver_service - get_all_distinct_buildings_from_db:274 - Fetching all distinct buildings from ProServer database...
+2026-01-02 00:01:17 - INFO - query_config - get_query:140 - Query 'buildings' not found in DB, using default
+2026-01-02 00:01:17 - INFO - main - log_requests:179 - ⮕ Incoming request: GET /favicon.ico
+2026-01-02 00:01:17 - DEBUG - main - log_requests:180 - Request headers: {'host': '127.0.0.1:7070', 'connection': 'keep-alive', 'sec-ch-ua-platform': '"Windows"', 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', 'sec-ch-ua': '"Brave";v="143", "Chromium";v="143", "Not A(Brand";v="24"', 'sec-ch-ua-mobile': '?0', 'accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8', 'sec-gpc': '1', 'accept-language': 'en-US,en;q=0.8', 'sec-fetch-site': 'same-origin', 'sec-fetch-mode': 'no-cors', 'sec-fetch-dest': 'image', 'referer': 'http://127.0.0.1:7070/', 'accept-encoding': 'gzip, deflate, br, zstd'}
+2026-01-02 00:01:17 - INFO - main - log_requests:184 - ⮐ Response: GET /favicon.ico - Status: 404
+2026-01-02 00:01:17 - INFO - __main__ - write:26 - 2026-01-02 00:01:17,928 - INFO - uvicorn.access - 127.0.0.1:63471 - "GET /favicon.ico HTTP/1.1" 404
+2026-01-02 00:01:17 - INFO - __main__ - write:26 - 2026-01-02 00:01:17,928 - INFO - uvicorn.access - 127.0.0.1:63471 - "GET /favicon.ico HTTP/1.1" 404
+2026-01-02 00:01:17 - INFO - uvicorn.access - send:473 - 127.0.0.1:63471 - "GET /favicon.ico HTTP/1.1" 404
+2026-01-02 00:01:33 - ERROR - services.proserver_service - get_all_distinct_buildings_from_db:306 - ❌ Failed to query buildings from database: (pyodbc.OperationalError) ('08001', '[08001] [Microsoft][ODBC Driver 17 for SQL Server]TCP Provider: The wait operation timed out.\r\n (258) (SQLDriverConnect); [08001] [Microsoft][ODBC Driver 17 for SQL Server]Login timeout expired (0); [08001] [Microsoft][ODBC Driver 17 for SQL Server]Invalid connection string attribute (0); [08001] [Microsoft][ODBC Driver 17 for SQL Server]A network-related or instance-specific error has occurred while establishing a connection to SQL Server. Server is not found or not accessible. Check if instance name is correct and if SQL Server is configured to allow remote connections. For more information see SQL Server Books Online. (258)')
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-01-02 00:01:33 - INFO - services.device_service - get_distinct_buildings:30 - ✅ Retrieved 0 distinct buildings
+2026-01-02 00:01:33 - DEBUG - routes - list_buildings:48 - Retrieved 0 buildings from database
+2026-01-02 00:01:33 - DEBUG - routes - list_buildings:51 - Retrieved schedules for 0 buildings from SQLite
+2026-01-02 00:01:33 - INFO - routes - list_buildings:65 - ✅ Returning 0 buildings
+2026-01-02 00:01:33 - INFO - main - log_requests:184 - ⮐ Response: GET /api/buildings - Status: 200
+2026-01-02 00:01:33 - INFO - __main__ - write:26 - 2026-01-02 00:01:33,052 - INFO - uvicorn.access - 127.0.0.1:58354 - "GET /api/buildings HTTP/1.1" 200
+2026-01-02 00:01:33 - INFO - __main__ - write:26 - 2026-01-02 00:01:33,052 - INFO - uvicorn.access - 127.0.0.1:58354 - "GET /api/buildings HTTP/1.1" 200
+2026-01-02 00:01:33 - INFO - uvicorn.access - send:473 - 127.0.0.1:58354 - "GET /api/buildings HTTP/1.1" 200
+2026-01-02 00:02:11 - DEBUG - schedule - run:690 - Running job Job(interval=1, unit=minutes, do=scheduled_job, args=(), kwargs={})
+2026-01-02 00:02:11 - INFO - services.scheduler_service - scheduled_job:30 - ======================================================================
+2026-01-02 00:02:11 - INFO - services.scheduler_service - scheduled_job:31 - 🔄 SCHEDULER: Starting scheduled job execution
+2026-01-02 00:02:11 - INFO - services.scheduler_service - scheduled_job:32 - ======================================================================
+2026-01-02 00:02:11 - INFO - services.scheduler_service - scheduled_job:36 - 📅 PHASE 1: Checking scheduled times and sending alerts if needed...
+2026-01-02 00:02:18 - DEBUG - services.proserver_service - get_all_live_building_arm_states:223 - Fetching all building panel states from ProServer database...
+2026-01-02 00:02:18 - INFO - query_config - get_query:140 - Query 'panel_devices' not found in DB, using default
+2026-01-02 00:02:34 - ERROR - services.proserver_service - get_all_live_building_arm_states:261 - ❌ Failed to fetch building panel states: (pyodbc.OperationalError) ('08001', '[08001] [Microsoft][ODBC Driver 17 for SQL Server]TCP Provider: The wait operation timed out.\r\n (258) (SQLDriverConnect); [08001] [Microsoft][ODBC Driver 17 for SQL Server]Login timeout expired (0); [08001] [Microsoft][ODBC Driver 17 for SQL Server]Invalid connection string attribute (0); [08001] [Microsoft][ODBC Driver 17 for SQL Server]A network-related or instance-specific error has occurred while establishing a connection to SQL Server. Server is not found or not accessible. Check if instance name is correct and if SQL Server is configured to allow remote connections. For more information see SQL Server Books Online. (258)')
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-01-02 00:02:34 - INFO - services.scheduler_service - scheduled_job:38 - ✅ PHASE 1: Completed successfully
+2026-01-02 00:02:34 - INFO - services.scheduler_service - scheduled_job:39 - ----------------------------------------------------------------------
+2026-01-02 00:02:34 - INFO - services.scheduler_service - scheduled_job:42 - 🔍 PHASE 2: Monitoring panel state changes and managing ProEvents...
+2026-01-02 00:02:34 - DEBUG - services.proserver_service - get_all_live_building_arm_states:223 - Fetching all building panel states from ProServer database...
+2026-01-02 00:02:34 - INFO - query_config - get_query:140 - Query 'panel_devices' not found in DB, using default
+2026-01-02 00:02:49 - ERROR - services.proserver_service - get_all_live_building_arm_states:261 - ❌ Failed to fetch building panel states: (pyodbc.OperationalError) ('08001', '[08001] [Microsoft][ODBC Driver 17 for SQL Server]TCP Provider: The wait operation timed out.\r\n (258) (SQLDriverConnect); [08001] [Microsoft][ODBC Driver 17 for SQL Server]Login timeout expired (0); [08001] [Microsoft][ODBC Driver 17 for SQL Server]Invalid connection string attribute (0); [08001] [Microsoft][ODBC Driver 17 for SQL Server]A network-related or instance-specific error has occurred while establishing a connection to SQL Server. Server is not found or not accessible. Check if instance name is correct and if SQL Server is configured to allow remote connections. For more information see SQL Server Books Online. (258)')
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-01-02 00:02:49 - DEBUG - services.cache_service - get_cache_value:7 - Getting value from cache for key: panel_state_cache
+2026-01-02 00:02:49 - INFO - cache - load_cache:37 - Cache loaded from file.
+2026-01-02 00:02:49 - DEBUG - services.cache_service - set_cache_value:12 - Setting value in cache for key: panel_state_cache
+2026-01-02 00:02:49 - INFO - services.cache_service - set_cache_value:16 - Cache updated for key: panel_state_cache
+2026-01-02 00:02:49 - INFO - services.scheduler_service - scheduled_job:44 - ✅ PHASE 2: Completed successfully
+2026-01-02 00:02:49 - INFO - services.scheduler_service - scheduled_job:46 - ======================================================================
+2026-01-02 00:02:49 - INFO - services.scheduler_service - scheduled_job:47 - ✅ SCHEDULER: Scheduled job completed successfully
+2026-01-02 00:02:49 - INFO - services.scheduler_service - scheduled_job:48 - ======================================================================
+2026-01-02 00:03:03 - INFO - __main__ - write:26 - 2026-01-02 00:03:03,500 - INFO - uvicorn.error - Shutting down
+2026-01-02 00:03:03 - INFO - uvicorn.error - shutdown:263 - Shutting down
+2026-01-02 00:03:03 - INFO - __main__ - write:26 - 2026-01-02 00:03:03,606 - INFO - uvicorn.error - Waiting for application shutdown.
+2026-01-02 00:03:03 - INFO - uvicorn.error - shutdown:67 - Waiting for application shutdown.
+2026-01-02 00:03:03 - INFO - main - lifespan:63 - Application shutting down...
+2026-01-02 00:03:03 - INFO - __main__ - write:26 - 2026-01-02 00:03:03,609 - INFO - uvicorn.error - Application shutdown complete.
+2026-01-02 00:03:03 - INFO - uvicorn.error - shutdown:76 - Application shutdown complete.
+2026-01-02 00:03:03 - INFO - __main__ - write:26 - 2026-01-02 00:03:03,610 - INFO - uvicorn.error - Finished server process [28164]
+2026-01-02 00:03:03 - INFO - uvicorn.error - _serve:93 - Finished server process [28164]

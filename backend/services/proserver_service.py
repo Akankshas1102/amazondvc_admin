@@ -1,11 +1,12 @@
 """
-ProServer Service
-=================
+ProServer Service - FIXED VERSION
+==================================
 Handles communication with the ProServer database and TCP/IP notifications.
 
-MODIFICATIONS:
-- Now uses dynamic queries from query_config module
-- All hardcoded queries replaced with configurable queries
+TERMINOLOGY CLARIFICATION:
+- ProEvent Reactive State: 0 = ARMED/REACTIVE (responds to events)
+- ProEvent Non-Reactive State: 1 = DISARMED/NON-REACTIVE (does not respond to events)
+- Panel State: AreaArmingStates.4 = ARMED, AreaArmingStates.2 = DISARMED
 """
 
 import socket
@@ -13,40 +14,35 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 from logger import get_logger
 from config import get_db_connection, engine, PROSERVER_IP, PROSERVER_PORT
-from query_config import get_query  # NEW: Import dynamic query getter
+from query_config import get_query
 
 logger = get_logger(__name__)
 
 
-# --- TCP/IP Functions (Unchanged) ---
+# --- TCP/IP NOTIFICATION FUNCTIONS ---
 
 def send_proserver_notification(building_name: str):
     """
     Sends a unified notification to the ProServer.
-    Format: axe,{building_name}_{device_id}@
+    Format: axe,{building_name}_Is_Armed@
     """
     message = f"axe,{building_name}_Is_Armed@"
-    logger.info(f"Attempting to send notification to ProServer: {message}")
+    logger.info(f"Sending notification to ProServer: {message}")
     
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((PROSERVER_IP, PROSERVER_PORT))
             s.sendall(message.encode())
+            logger.info(f"✅ Notification sent successfully: {message}")
     except Exception as e:
-        logger.error(f"Failed to send notification to ProServer: {e}")
+        logger.error(f"❌ Failed to send notification to ProServer: {e}")
 
-
-# --- DATABASE FUNCTIONS (MODIFIED TO USE DYNAMIC QUERIES) ---
 
 def send_armed_axe_message(building_id: int):
     """
-    Checks if a specific building is in the 'AreaArmingStates.4' state.
-    If it is, fetches the building name and sends the dynamic armed message.
-    
-    MODIFIED: Now uses dynamic query from query_config
+    Checks if a building panel is in ARMED state (AreaArmingStates.4).
+    If yes, sends armed AXE alert to ProServer.
     """
-    
-    # NEW: Get query from configuration
     query_sql = get_query('building_name')
     
     if not query_sql:
@@ -62,38 +58,73 @@ def send_armed_axe_message(building_id: int):
             row = result.fetchone()
             
             if row:
-                # Use the column name from the query (should be bldBuildingName_TXT)
                 building_name = row.bldBuildingName_TXT
 
     except Exception as e:
-        logger.error(f"Failed to query for building name for Axe message: {e}")
+        logger.error(f"❌ Failed to query building name for AXE message: {e}")
         return
 
-    # Only send if the query returned a building name
+    # Only send if building is in ARMED state (AreaArmingStates.4)
     if building_name:
         message = f"axe,{building_name}_Is_Armed@"
-        logger.info(f"Building {building_id} is 'AreaArmingStates.4'. Sending message: {message}")
+        logger.info(f"[Building {building_id}] Panel is ARMED (AreaArmingStates.4). Sending: {message}")
         
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.connect((PROSERVER_IP, PROSERVER_PORT))
                 s.sendall(message.encode())
+                logger.info(f"✅ Armed AXE notification sent: {message}")
         except Exception as e:
-            logger.error(f"Failed to send armed axe notification to ProServer: {e}")
+            logger.error(f"❌ Failed to send armed AXE notification: {e}")
     else:
-        logger.info(f"Building {building_id} is not in 'AreaArmingStates.4'. No message sent.")
+        logger.debug(f"[Building {building_id}] Panel not in ARMED state (AreaArmingStates.4). No message sent.")
 
+
+def send_disarmed_axe_message(building_id: int):
+    """
+    Sends a 'disarmed' AXE alert to ProServer at schedule start time.
+    Message format: axe,<building_name>_Is_Disarmed@
+    """
+    try:
+        with get_db_connection() as session:
+            result = session.execute(
+                text("SELECT bldBuildingName_TXT FROM Building_TBL WHERE Building_PRK = :building_id"),
+                {"building_id": building_id}
+            )
+            row = result.fetchone()
+
+        if not row or not row[0]:
+            logger.warning(f"[Building {building_id}] Building name not found for disarmed alert.")
+            return
+
+        building_name = row[0]
+        message = f"axe,{building_name}_Is_Disarmed@"
+        logger.info(f"[Building {building_id}] Panel DISARMED (AreaArmingStates.2). Sending: {message}")
+
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.connect((PROSERVER_IP, PROSERVER_PORT))
+            s.sendall(message.encode())
+            logger.info(f"✅ Disarmed AXE notification sent: {message}")
+
+    except Exception as e:
+        logger.error(f"❌ Failed to send disarmed AXE notification: {e}")
+
+
+# --- DATABASE QUERY FUNCTIONS ---
 
 def get_proevents_for_building_from_db(building_id: int) -> list[dict]:
     """
-    Connects to the ProServer DB and runs query to get all
-    devices, their IDs, their states, and the building name.
+    Fetches all ProEvents for a building from ProServer database.
     
-    MODIFIED: Now uses dynamic query from query_config
+    Returns:
+        list[dict]: ProEvents with fields:
+            - id: ProEvent_PRK
+            - state: pevReactive_FRK (0=reactive/armed, 1=non-reactive/disarmed)
+            - name: pevAlias_TXT
+            - building_name: bldBuildingName_TXT
     """
-    logger.info(f"Connecting to ProServer DB to get proevents for building {building_id}...")
+    logger.info(f"[Building {building_id}] Fetching ProEvents from ProServer database...")
     
-    # NEW: Get query from configuration
     query_sql = get_query('proevents')
     
     if not query_sql:
@@ -109,48 +140,57 @@ def get_proevents_for_building_from_db(building_id: int) -> list[dict]:
             rows = result.fetchall()
             
             if not rows:
-                logger.warning(f"No proevents found in ProEvent_TBL for building {building_id}")
+                logger.warning(f"[Building {building_id}] No ProEvents found in ProEvent_TBL")
                 return []
                 
             for row in rows:
+                # pevReactive_FRK: 0 = REACTIVE (armed), 1 = NON-REACTIVE (disarmed)
                 results.append({
                     "id": row.ProEvent_PRK,
-                    "state": row.pevReactive_FRK,  # This is the 0 or 1
+                    "state": row.pevReactive_FRK,
                     "name": row.pevAlias_TXT,
                     "building_name": row.bldBuildingName_TXT
                 })
             
             db.commit()
         
-        logger.info(f"Successfully fetched {len(results)} device states from DB for building {building_id}")
+        logger.info(f"✅ [Building {building_id}] Fetched {len(results)} ProEvents from database")
         return results
         
     except Exception as e:
-        logger.error(f"Failed to query ProServer DB for proevents: {e}")
+        logger.error(f"❌ Failed to query ProEvents from database: {e}")
         raise
 
 
 def set_proevent_reactive_state_bulk(target_states: list[dict]) -> bool:
     """
-    Connects to the ProServer DB and updates device states in bulk.
-    'target_states' is a list: [{'id': 1001, 'state': 0}, {'id': 1002, 'state': 1}, ...]
+    Updates ProEvent reactive states in bulk in ProServer database.
     
-    NOTE: This function uses a fixed UPDATE query as it's not meant to be configurable
+    Args:
+        target_states: List of {"id": proevent_id, "state": reactive_state}
+                      where state: 0 = REACTIVE (armed), 1 = NON-REACTIVE (disarmed)
+    
+    Returns:
+        bool: True if successful, False otherwise
     """
     if not target_states:
-        logger.info("No target states provided to set_proevent_reactive_state_bulk. Skipping.")
+        logger.debug("No target states provided to set_proevent_reactive_state_bulk. Skipping.")
         return True
 
-    logger.info(f"Connecting to ProServer DB to set {len(target_states)} device states...")
+    reactive_count = sum(1 for s in target_states if s['state'] == 0)
+    non_reactive_count = len(target_states) - reactive_count
+    
+    logger.info(f"Updating {len(target_states)} ProEvent states in ProServer database: "
+               f"{reactive_count} to REACTIVE (0), {non_reactive_count} to NON-REACTIVE (1)")
     
     sql = text("""
         UPDATE ProEvent_TBL 
         SET pevReactive_FRK = :state 
-        WHERE ProEvent_PRK = :device_id
+        WHERE ProEvent_PRK = :proevent_id
     """)
     
     data_to_update = [
-        {"state": item['state'], "device_id": item['id']} 
+        {"state": item['state'], "proevent_id": item['id']} 
         for item in target_states
     ]
     
@@ -159,31 +199,29 @@ def set_proevent_reactive_state_bulk(target_states: list[dict]) -> bool:
             db.execute(sql, data_to_update)
             db.commit()
             
-        logger.info(f"Successfully updated {len(data_to_update)} device states in ProServer DB.")
+        logger.info(f"✅ Successfully updated {len(data_to_update)} ProEvent states in ProServer database")
         return True
         
     except Exception as e:
-        logger.error(f"Failed to bulk update states in ProServer DB: {e}")
+        logger.error(f"❌ Failed to bulk update ProEvent states in database: {e}")
         return False
 
 
-def get_all_live_building_arm_states():
+def get_all_live_building_arm_states() -> dict:
     """
-    Returns a dictionary of {building_id: bool}
-      True  = ARMED
-      False = DISARMED
-
-    Each building has exactly one panel device (dvcDeviceType_FRK = 138).
-    We read its dvcCurrentState_TXT and decide:
-      - If AreaArmingStates.2 → DISARMED
-      - Everything else → ARMED
+    Returns current panel arm/disarm state for all buildings.
     
-    MODIFIED: Now uses dynamic query from query_config
+    Panel States:
+    - AreaArmingStates.4 = ARMED
+    - AreaArmingStates.2 = DISARMED
+    - All other states = ARMED (default)
+    
+    Returns:
+        dict: {building_id: is_armed} where is_armed is True for ARMED, False for DISARMED
     """
     try:
-        logger.info("Connecting to ProServer DB to get all building panel states...")
+        logger.debug("Fetching all building panel states from ProServer database...")
 
-        # NEW: Get query from configuration
         query_sql = get_query('panel_devices')
         
         if not query_sql:
@@ -195,37 +233,46 @@ def get_all_live_building_arm_states():
             rows = session.execute(query).fetchall()
 
         result = {}
+        armed_count = 0
+        disarmed_count = 0
+        
         for building_id, state_txt in rows:
             if not building_id:
                 continue
 
             state_str = (state_txt or "").strip()
 
-            # Only AreaArmingStates.2 is DISARMED; everything else = ARMED
+            # AreaArmingStates.2 = DISARMED, all others = ARMED
             if "AreaArmingStates.2" in state_str:
                 is_armed = False
+                disarmed_count += 1
             else:
                 is_armed = True
+                armed_count += 1
 
             result[int(building_id)] = is_armed
 
-        logger.info(f"Successfully fetched {len(result)} building panel states.")
+        logger.info(f"✅ Fetched panel states for {len(result)} buildings: "
+                   f"{armed_count} ARMED (AreaArmingStates.4), "
+                   f"{disarmed_count} DISARMED (AreaArmingStates.2)")
         return result
 
     except Exception as e:
-        logger.error(f"Failed to fetch live building panel states: {e}")
+        logger.error(f"❌ Failed to fetch building panel states: {e}")
         return {}
 
 
 def get_all_distinct_buildings_from_db() -> list[dict]:
     """
-    Fetches a list of all unique buildings from the Building_TBL.
+    Fetches list of all unique buildings from Building_TBL.
     
-    MODIFIED: Now uses dynamic query from query_config
+    Returns:
+        list[dict]: Buildings with fields:
+            - id: Building_PRK
+            - name: bldBuildingName_TXT
     """
-    logger.info("Connecting to ProServer DB to get distinct buildings...")
+    logger.info("Fetching all distinct buildings from ProServer database...")
     
-    # NEW: Get query from configuration
     query_sql = get_query('buildings')
     
     if not query_sql:
@@ -252,38 +299,9 @@ def get_all_distinct_buildings_from_db() -> list[dict]:
             
             db.commit()
         
-        logger.info(f"Successfully fetched {len(results)} distinct buildings.")
+        logger.info(f"✅ Fetched {len(results)} distinct buildings from database")
         return results
         
     except Exception as e:
-        logger.error(f"Failed to query ProServer DB for distinct buildings: {e}")
+        logger.error(f"❌ Failed to query buildings from database: {e}")
         return []
-
-
-def send_disarmed_axe_message(building_id: int):
-    """
-    Sends a 'disarmed' AXE alert to ProServer at schedule start time.
-    Message format: axe,<building_name>_Is_Disarmed@
-    """
-    try:
-        with get_db_connection() as session:
-            result = session.execute(
-                text("SELECT bldBuildingName_TXT FROM Building_TBL WHERE Building_PRK = :building_id"),
-                {"building_id": building_id}
-            )
-            row = result.fetchone()
-
-        if not row or not row[0]:
-            logger.warning(f"Building {building_id}: name not found for disarmed alert.")
-            return
-
-        building_name = row[0]
-        message = f"axe,{building_name}_Is_Disarmed@"
-        logger.info(f"[Building {building_id}] Panel DISARMED. Sending message: {message}")
-
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.connect((PROSERVER_IP, PROSERVER_PORT))
-            s.sendall(message.encode())
-
-    except Exception as e:
-        logger.error(f"Failed to send disarmed AXE notification to ProServer: {e}")
